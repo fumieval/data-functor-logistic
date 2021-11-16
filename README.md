@@ -41,7 +41,8 @@ While the type of `deliver` is slightly more intimidating, it's actually very cl
 the `Functor` constraint is `Contravariant` instead and the contents are endomorphisms.
 
 Here's the instance for `Complex`. `deliver f` contramaps a setter function to `f` for each field:
-```
+
+```haskell
 instance Logistic Complex where
   deliver f
     = contramap (\g (a :+ b) -> g a :+ b) f
@@ -64,5 +65,7 @@ ghci> setR (+1) (0 :+ 1)
 ghci> setI (+1) (0 :+ 1)
 0 :+ 2
 ```
+
+`deliver` has a generic default implementation which works for any single-constructor products.
 
 This class can be useful to complement `Distributive`. Generalisation to higher-kinded data would also be interesting.
