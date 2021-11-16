@@ -40,6 +40,14 @@ class Functor t => Logistic t where
 While the type of `deliver` is slightly more intimidating, it's actually very close to the `distribute`;
 the `Functor` constraint is `Contravariant` instead and the contents are endomorphisms.
 
+Here's the instance for `Complex`. `deliver f` contramaps a setter function to `f` for each field:
+```
+instance Logistic Complex where
+  deliver f
+    = contramap (\g (a :+ b) -> g a :+ b) f
+    :+ contramap (\g (a :+ b) -> a :+ g b) f
+ ```
+
 Instantiating the `Op` contravariant functor, it is trivial to obtain a collection of setters.
 
 ```haskell
@@ -50,7 +58,7 @@ setters = getOp <$> deliver (Op id)
 ```
 
 ```haskell
-ghci> let setR :+ serI = setters
+ghci> let setR :+ setI = setters
 ghci> setR (+1) (0 :+ 1)
 1 :+ 1
 ghci> setI (+1) (0 :+ 1)
